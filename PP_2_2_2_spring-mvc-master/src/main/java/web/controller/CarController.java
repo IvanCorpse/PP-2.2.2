@@ -5,25 +5,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import web.service.CarServiceImpl;
+import web.service.CarService;
 
 @Controller
 public class CarController {
-    private final CarServiceImpl csi;
+    private final CarService cs;
 
     @Autowired
-    public CarController(CarServiceImpl csi) {
-        this.csi = csi;
+    public CarController(CarService csi) {
+        this.cs = csi;
     }
 
     @GetMapping(value = "/cars")
-    public String getCarList(@RequestParam(value = "count", required = false) String count, ModelMap model) {
+    public String getCarList(@RequestParam(value = "count", required = false) Integer count, ModelMap model) {
         model.addAttribute("count", count);
-        if (count != null) {
-            model.addAttribute("cars", csi.getCarList(Integer.parseInt(count)));
-        } else {
-            model.addAttribute("cars", csi.getCarList());
-        }
+        model.addAttribute("cars", cs.getCarList(count));
         return "cars";
     }
 }
